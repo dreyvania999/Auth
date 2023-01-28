@@ -9,26 +9,38 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly DispatcherTimer timer = new();
         private readonly DispatcherTimer dispatcherTimer = new();
+        public static int IsRunningSecond = 0;
         public static string GlobalNumbers;
-        int time = 0;
+        int time = 60;
 
-        
+
         private void setVisibility()
         {
             StaticBlocedString.Visibility = Visibility.Visible;
             EditingBlocedString.Visibility = Visibility.Visible;
+            SartAutorization.IsEnabled = false;
+            time = 60;
+        }
+        private void setInVisibility()
+        {
+            StaticBlocedString.Visibility = Visibility.Collapsed;
+            EditingBlocedString.Visibility = Visibility.Collapsed;
+            SartAutorization.IsEnabled = true;
+            time = 60;
         }
 
-        private void setUsability(object sender, EventArgs e)
+        private void UpdateTime(object sender, EventArgs e)
         {
-            
+            time--;
+            EditingBlocedString.Text = time.ToString() + " сек";
+            if (time==0)
+            {
+                dispatcherTimer.Stop();
+                setInVisibility();
+            }
         }
-        private void setNewText(object sender, EventArgs e)
-        {
-            EditingBlocedString.Text = time++
-        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -48,21 +60,18 @@ namespace WpfApp1
                     Owner = this
                 };
                 bool? d = taskWindow.ShowDialog();
-                if (d.HasValue && d.Value)
+                if (d.HasValue && d.Value&& IsRunningSecond==1)
                 {
                     setVisibility();
-                    timer.Interval = new TimeSpan(0, 0, 10);
-                    timer.Tick += new EventHandler(setUsability);
-                    timer.Start();
 
-                    
-                    dispatcherTimer.Tick += new EventHandler();
+                    dispatcherTimer.Tick += new EventHandler(UpdateTime);
                     dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                     dispatcherTimer.Start();
                 }
+               
 
             }
-            
+
         }
     }
 }

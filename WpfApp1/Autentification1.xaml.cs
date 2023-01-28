@@ -25,6 +25,8 @@ namespace WpfApp1
             MessageBox.Show("Время вышло ");
             IsBlocedState = true;
             DialogResult = IsBlocedState;
+            MainWindow.IsRunningSecond++;
+            timer.Stop();
             Close();
         }
 
@@ -37,15 +39,18 @@ namespace WpfApp1
             if (MainWindow.GlobalNumbers == FiveSignsBox.Text)
             {
                 MessageBox.Show("все норм");
-                IsBlocedState = false;
+                MainWindow.IsRunningSecond = 0;
                 DialogResult = IsBlocedState;
+                timer.Stop();
                 Close();
             }
             else
             {
                 MessageBox.Show("Введенные значения не совпадпют с ранее продемонстрированными данными");
                 IsBlocedState = true;
+                MainWindow.IsRunningSecond++;
                 DialogResult = IsBlocedState;
+                timer.Stop();
                 Close();
             }
 
