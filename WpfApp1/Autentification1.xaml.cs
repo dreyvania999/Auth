@@ -10,8 +10,8 @@ namespace WpfApp1
     /// </summary>
     public partial class Autentification1 : Window
     {
-        static bool IsBlocedState = false;
-        DispatcherTimer timer = new();
+        private static bool IsBlocedState = false;
+        private readonly DispatcherTimer timer = new();
         public Autentification1()
         {
             InitializeComponent();
