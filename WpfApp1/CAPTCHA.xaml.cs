@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,16 +21,22 @@ namespace WpfApp1
     public partial class CAPTCHA : Window
     {
         private static string CapthaText ="";
-        private Random random = new Random();
+        private Random random;
         private int CapchaHeight;
         private int CapchaWidth;
         public CAPTCHA()
         {
             InitializeComponent();
+            GenerateCaptha();
+        }
+
+        void GenerateCaptha()
+        {
+            random = new Random();
             CapchaHeight = (int)CAPTCHACanva.Height;
             CapchaWidth = (int)CAPTCHACanva.Width;
-            int sizeSTR= random.Next(7, 11);
-            while (CapthaText.Length< sizeSTR)
+            int sizeSTR = random.Next(7, 11);
+            while (CapthaText.Length < sizeSTR)
             {
                 if (random.Next(1, 3) == 1)
                 {
@@ -41,7 +48,7 @@ namespace WpfApp1
                 }
             }
             int i = 0;
-            while (sizeSTR>i)
+            while (sizeSTR > i)
             {
                 Line l = new Line()
                 {
@@ -49,14 +56,15 @@ namespace WpfApp1
                     Y1 = random.Next(CapchaHeight),
                     X2 = random.Next(CapchaWidth),
                     Y2 = random.Next(CapchaHeight),
-                    Stroke = Brushes.Black,
+                    StrokeThickness = random.Next(1, 5),
+                    Stroke = new SolidColorBrush(Color.FromRgb((byte)random.Next(1, 255), (byte)random.Next(1, 255), (byte)random.Next(1, 233))),
                 };
                 CAPTCHACanva.Children.Add(l);
                 i++;
             }
 
-            int LeftPositionText = (int) CapchaWidth/ sizeSTR;
-            int currentLeftPosition = 0;
+            int LeftPositionText = (int)(CapchaWidth - 20) / (sizeSTR + 5);
+            int currentLeftPosition = 10;
             foreach (var item in CapthaText)
             {
                 TextBlock tb = new TextBlock()
@@ -78,14 +86,26 @@ namespace WpfApp1
                         break;
                 }
                 CAPTCHACanva.Children.Add(tb);
-                currentLeftPosition = random.Next(currentLeftPosition, LeftPositionText) +10;
+
+
                 Canvas.SetLeft(tb, currentLeftPosition);
-                Canvas.SetRight
-                Canvas.SetTop(tb, random.Next(CapchaHeight / 3, (CapchaHeight/3)*2));
-                LeftPositionText = currentLeftPosition+ (int)CapchaWidth / sizeSTR;
-                
+                currentLeftPosition = random.Next(currentLeftPosition, LeftPositionText) + 10;
+                LeftPositionText = currentLeftPosition + ((CapchaWidth - 20) / sizeSTR);
+
+                Canvas.SetTop(tb, random.Next(CapchaHeight / 3, (CapchaHeight / 6) * 4));
             }
-            MessageBox.Show(LeftPositionText + "    " + sizeSTR);
+        }       
+
+        private void CheckCaptha_Click(object sender, RoutedEventArgs e)
+        {           
+            if (textCaptha.Text.ToLower() == CapthaText.ToLower())
+            {
+                MessageBox.Show("Вы прошли проверку");
+            }
+            else
+            {
+                MessageBox.Show("Неверно введено значение");
+            }
         }
     }
 }

@@ -14,7 +14,8 @@ namespace WpfApp1
         public static string GlobalNumbers;
         private int time = 4;
 
-
+        private string login = "login1";
+        private string password = "0000"; 
         private void setVisibility()
         {
             StaticBlocedString.Visibility = Visibility.Visible;
@@ -44,6 +45,7 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
+            NewAuthCode.Visibility = Visibility.Collapsed;
 
         }
 
@@ -51,6 +53,12 @@ namespace WpfApp1
         {
             if (IsRunningSecond < 1)
             {
+                if (UserLogin.Text != login || UserPassword.Password != password)
+                {
+                    MessageBox.Show("Проверьте введенные данные");
+                    return;
+                }
+
                 Random random = new();
                 GlobalNumbers = random.Next(10000, 100000).ToString();
                 MessageBoxResult result;
@@ -69,21 +77,52 @@ namespace WpfApp1
                         dispatcherTimer.Tick += new EventHandler(UpdateTime);
                         dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
                         dispatcherTimer.Start();
-                    }
+                        NewAuthCode.Visibility = Visibility.Visible;
+                        SartAutorization.IsEnabled = false;
+
+                    }                   
 
                 }
             }
-            else
+                     
+        }
+
+        private void NewAuthCode_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsRunningSecond < 2)
             {
-                CAPTCHA CAPTCHAWindow = new()
+                if (UserLogin.Text != login || UserPassword.Password != password)
                 {
-                    Owner = this
-                };
-                bool? s = CAPTCHAWindow.ShowDialog();
+                    MessageBox.Show("Проверьте введенные данные");
+                    return;
+                }
+
+                Random random = new();
+                GlobalNumbers = random.Next(10000, 100000).ToString();
+                MessageBoxResult result;
+                result = MessageBox.Show(GlobalNumbers);
+                if (result != 0)
+                {
+                    Autentification1 taskWindow = new()
+                    {
+                        Owner = this
+                    };
+                    bool? d = taskWindow.ShowDialog();
+                    if (d.HasValue && d.Value)
+                    {
+                        CAPTCHA CAPTCHAWindow = new()
+                        {
+                            Owner = this
+                        };
+                        bool? s = CAPTCHAWindow.ShowDialog();
+
+                        SartAutorization.IsEnabled = false;
+                    }
+
+                }
+                NewAuthCode.Visibility = Visibility.Collapsed;
             }
-
-
-
+            
         }
     }
 }

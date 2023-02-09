@@ -9,5 +9,7 @@
     <Grid>
 
         <Canvas  Name="CAPTCHACanva" Width="500"  Height="150" VerticalAlignment="Top" Background="AliceBlue"/>
+        <TextBox x:Name="textCaptha"  HorizontalAlignment="Center" Margin="0,191,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="CheckCaptha" Content="Проверить" Margin="0 200 0 0" Width="300"  Height="30" Click="CheckCaptha_Click" />
     </Grid>
 </Window>
